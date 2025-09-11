@@ -259,7 +259,6 @@ export function useEventsData() {
 
       // Update local state immediately
       setEventsConfig(newConfig);
-      localStorage.setItem("tfs-events-config", JSON.stringify(newConfig));
 
       // Sync with server with proper error handling
       try {
