@@ -138,13 +138,13 @@ export default function AdminLuminariesPanel() {
             <Input
               placeholder="Achievements (comma separated)"
               value={Array.isArray(newLuminary.achievements) ? newLuminary.achievements.join(", ") : (newLuminary.achievements as unknown as string)}
-              onChange={(e) => setNewLuminary((p) => ({ ...p, achievements: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))}
+              onChange={(e) => setNewLuminary((p) => ({ ...p, achievements: e.target.value }))}
               className="bg-finance-navy/50 border-finance-gold/20"
             />
             <Input
               placeholder="Expertise (comma separated)"
               value={Array.isArray(newLuminary.expertise) ? newLuminary.expertise.join(", ") : (newLuminary.expertise as unknown as string)}
-              onChange={(e) => setNewLuminary((p) => ({ ...p, expertise: e.target.value.split(",").map((s) => s.trim()).filter(Boolean) }))}
+              onChange={(e) => setNewLuminary((p) => ({ ...p, expertise: e.target.value }))}
               className="bg-finance-navy/50 border-finance-gold/20"
             />
             <Button
