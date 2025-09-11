@@ -103,6 +103,18 @@
         "Corporate Compliance"
       ],
       "quote": "Understanding legal frameworks is essential for sound financial decision-making and corporate compliance."
+    },
+    {
+      "id": "faculty-1757587856961",
+      "name": "Fr. Ambrose Machado",
+      "title": "Assistant Professor",
+      "bio": "",
+      "image": "",
+      "email": "ambrose.machado@xaviers.edu",
+      "linkedin": "",
+      "achievements": [],
+      "expertise": [],
+      "quote": ""
     }
   ],
   "leadership": [
@@ -189,5 +201,5 @@
       "isLeadership": true
     }
   ],
-  "lastModified": 1757587429752
+  "lastModified": 1757587878881
 }
