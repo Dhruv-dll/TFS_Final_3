@@ -254,7 +254,7 @@ export function useLuminariesData() {
 
   const checkSync = async () => {
     try {
-      const localLast = JSON.parse(localStorage.getItem("tfs-luminaries-config") || "{}").lastModified || 0;
+      const localLast = config.lastModified || 0;
       const res = await fetchWithTimeout(`/api/luminaries/sync?lastModified=${localLast}`, undefined, 5000);
       if (res.ok) {
         const result = await res.json();
@@ -267,13 +267,8 @@ export function useLuminariesData() {
 
   useEffect(() => {
     const init = async () => {
-      const fromLocal = loadFromLocal();
-      if (!fromLocal) {
-        const fromServer = await loadFromServer();
-        if (!fromServer) setConfig(defaultConfig);
-      } else {
-        await checkSync();
-      }
+      const fromServer = await loadFromServer();
+      if (!fromServer) setConfig(defaultConfig);
       setLoading(false);
     };
     init();
@@ -285,7 +280,6 @@ export function useLuminariesData() {
   const saveConfig = async (next: LuminariesConfig) => {
     next.lastModified = Date.now();
     setConfig(next);
-    localStorage.setItem("tfs-luminaries-config", JSON.stringify(next));
     try {
       await fetchWithTimeout(
         "/api/luminaries",
@@ -301,18 +295,9 @@ export function useLuminariesData() {
   };
 
   useEffect(() => {
-    const onStorage = (e: StorageEvent) => {
-      if (e.key === "tfs-luminaries-config" && e.newValue) {
-        try { setConfig(JSON.parse(e.newValue)); } catch {}
-      }
-    };
-    window.addEventListener("storage", onStorage);
-    const onCustom = () => loadFromLocal();
+    const onCustom = () => loadFromServer();
     window.addEventListener("tfs-luminaries-updated", onCustom as EventListener);
-    return () => {
-      window.removeEventListener("storage", onStorage);
-      window.removeEventListener("tfs-luminaries-updated", onCustom as EventListener);
-    };
+    return () => window.removeEventListener("tfs-luminaries-updated", onCustom as EventListener);
   }, []);
 
   const faculty = useMemo(() => config.faculty, [config.faculty]);
