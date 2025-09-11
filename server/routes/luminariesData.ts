@@ -244,7 +244,21 @@ async function loadLuminariesData(): Promise<LuminariesConfig> {
 async function saveLuminariesData(config: LuminariesConfig): Promise<void> {
   await ensureDataDirectory();
   config.lastModified = Date.now();
-  await fs.writeFile(LUMINARIES_DATA_PATH, JSON.stringify(config, null, 2));
+  const content = JSON.stringify(config, null, 2);
+  await fs.writeFile(LUMINARIES_DATA_PATH, content);
+
+  // Try to commit to GitHub for global persistence (optional)
+  try {
+    const { commitFileToGitHub } = await import("../utils/git");
+    const result = await commitFileToGitHub("data/luminaries.json", content, "chore: update luminaries.json via admin") as any;
+    if (!result.success) {
+      console.warn("GitHub commit for luminaries.json failed:", result.error);
+    } else {
+      console.log("Committed luminaries.json to GitHub:", result.url);
+    }
+  } catch (gitErr) {
+    console.warn("Failed to commit luminaries.json to GitHub:", (gitErr as Error).message || gitErr);
+  }
 }
 
 export const getLuminariesData: RequestHandler = async (_req, res) => {
