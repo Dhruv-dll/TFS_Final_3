@@ -243,7 +243,6 @@ export function useLuminariesData() {
         const result = await res.json();
         if (result.success && result.data) {
           setConfig(result.data);
-          localStorage.setItem("tfs-luminaries-config", JSON.stringify(result.data));
           return true;
         }
       }
