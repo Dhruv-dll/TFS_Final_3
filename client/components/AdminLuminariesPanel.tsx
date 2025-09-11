@@ -63,6 +63,8 @@ export default function AdminLuminariesPanel() {
         quote: "",
       });
       setEditingId(null);
+    } else {
+      alert("Please fill in Name, Title, and Email before adding a luminary.");
     }
   };
 
@@ -147,6 +149,8 @@ export default function AdminLuminariesPanel() {
             />
             <Button
               onClick={handleAdd}
+              disabled={!newLuminary.name.trim() || !newLuminary.title.trim() || !newLuminary.email.trim()}
+              title={!newLuminary.name.trim() || !newLuminary.title.trim() || !newLuminary.email.trim() ? "Fill Name, Title, and Email to enable" : undefined}
               className="bg-gradient-to-r from-finance-gold to-finance-electric text-finance-navy hover:scale-105 transition-transform w-fit"
             >
               <Plus className="w-4 h-4 mr-2" /> {editingId ? "Save Changes" : "Add Luminary"}
