@@ -1,0 +1,487 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 346.8 77.2% 49.8%;
+    --primary-foreground: 355.7 100% 97.3%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 346.8 77.2% 49.8%;
+    --radius: 0.75rem;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 346.8 77.2% 49.8%;
+    --sidebar-primary-foreground: 355.7 100% 97.3%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 346.8 77.2% 49.8%;
+    --glow-color: #ffd700;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Professional finance-themed gradients and animations */
+@layer utilities {
+  .finance-gradient {
+    background: linear-gradient(135deg, #0b1426 0%, #1a2b42 50%, #2a3b52 100%);
+  }
+
+  .finance-glow {
+    box-shadow:
+      0 0 20px rgba(32, 178, 170, 0.4),
+      0 0 40px rgba(0, 139, 139, 0.3),
+      0 8px 32px rgba(0, 0, 0, 0.4);
+  }
+
+  .finance-border-glow {
+    border: 1px solid rgba(32, 178, 170, 0.4);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.1),
+      0 0 20px rgba(32, 178, 170, 0.2);
+  }
+
+  .market-card-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .market-card-hover:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+      0 0 30px rgba(32, 178, 170, 0.3),
+      0 20px 40px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* Advanced keyframe animations for market dashboard */
+@keyframes border-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes market-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes data-refresh {
+  0% {
+    transform: rotate(0deg) scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes float-gentle {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes price-change-flash {
+  0% {
+    background-color: rgba(255, 215, 0, 0.2);
+    transform: scale(1);
+  }
+  50% {
+    background-color: rgba(255, 215, 0, 0.4);
+    transform: scale(1.02);
+  }
+  100% {
+    background-color: transparent;
+    transform: scale(1);
+  }
+}
+
+/* Responsive mobile enhancements */
+@layer components {
+  .mobile-dashboard-optimized {
+    @apply overflow-hidden 
+      touch-pan-y 
+      scrollbar-thin 
+      scrollbar-track-finance-navy 
+      scrollbar-thumb-finance-gold/30;
+  }
+
+  .mobile-card-stack {
+    @apply space-y-3 
+      px-1 
+      sm:space-y-4 
+      sm:px-0;
+  }
+
+  .mobile-metric-grid {
+    @apply grid 
+      grid-cols-2 
+      gap-3 
+      sm:grid-cols-4 
+      sm:gap-4 
+      lg:gap-6;
+  }
+
+  .mobile-text-responsive {
+    @apply text-sm 
+      sm:text-base 
+      lg:text-lg;
+  }
+
+  .mobile-icon-responsive {
+    @apply w-4 
+      h-4 
+      sm:w-5 
+      sm:h-5 
+      lg:w-6 
+      lg:h-6;
+  }
+}
+
+/* Enhanced scrollbar styling for market data */
+.scrollbar-thin {
+  scrollbar-width: thin;
+}
+
+.scrollbar-track-finance-navy {
+  scrollbar-color: rgba(32, 178, 170, 0.3) rgba(11, 20, 38, 0.5);
+}
+
+.scrollbar-thumb-finance-teal\/30::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.scrollbar-thumb-finance-teal\/30::-webkit-scrollbar-track {
+  background: rgba(11, 20, 38, 0.5);
+  border-radius: 3px;
+}
+
+.scrollbar-thumb-finance-teal\/30::-webkit-scrollbar-thumb {
+  background: rgba(32, 178, 170, 0.3);
+  border-radius: 3px;
+}
+
+.scrollbar-thumb-finance-teal\/30::-webkit-scrollbar-thumb:hover {
+  background: rgba(32, 178, 170, 0.5);
+}
+
+/* Professional market ticker animation */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.market-ticker {
+  animation: ticker-scroll 60s linear infinite;
+}
+
+/* Smooth ticker animations for mobile and desktop */
+@keyframes mobileTickerScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes desktopTickerScroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Mobile ticker container and animation */
+.mobile-ticker-container {
+  width: 100%;
+  overflow: hidden;
+}
+
+.mobile-ticker-content {
+  display: flex;
+  width: 200%;
+  animation: mobileTicker 40s linear infinite;
+  will-change: transform;
+}
+
+@keyframes mobileTicker {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Absolutely no pause on mobile - override any hover states */
+.mobile-ticker-never-pause {
+  animation-play-state: running !important;
+  pointer-events: none !important;
+}
+
+.mobile-ticker-never-pause:hover,
+.mobile-ticker-never-pause:active,
+.mobile-ticker-never-pause:focus {
+  animation-play-state: running !important;
+}
+
+/* Loading states for market data */
+.market-data-skeleton {
+  background: linear-gradient(
+    90deg,
+    rgba(255, 215, 0, 0.1) 25%,
+    rgba(0, 212, 204, 0.1) 50%,
+    rgba(255, 215, 0, 0.1) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+/* Improved touch targets for mobile */
+.touch-target-enhanced {
+  @apply min-h-[44px] 
+    min-w-[44px] 
+    flex 
+    items-center 
+    justify-center;
+}
+
+/* Market status indicators */
+.market-status-live {
+  @apply relative 
+    after:absolute 
+    after:inset-0 
+    after:rounded-full 
+    after:bg-finance-green 
+    after:animate-ping 
+    after:opacity-75;
+}
+
+.market-status-closed {
+  @apply relative 
+    after:absolute 
+    after:inset-0 
+    after:rounded-full 
+    after:bg-finance-red 
+    after:opacity-50;
+}
+
+/* Interactive feedback for market items */
+.market-item-interactive {
+  @apply transition-all 
+    duration-300 
+    cursor-pointer 
+    hover:shadow-lg 
+    hover:shadow-finance-gold/10 
+    active:scale-[0.98] 
+    active:shadow-md;
+}
+
+/* High contrast mode support for accessibility */
+@media (prefers-contrast: high) {
+  .finance-text-gold {
+    color: #ffff00;
+  }
+
+  .finance-border-gold {
+    border-color: #ffff00;
+  }
+
+  .finance-bg-navy {
+    background-color: #000033;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .animate-pulse,
+  .animate-spin,
+  .animate-bounce {
+    animation: none;
+  }
+
+  .market-ticker {
+    animation: none;
+    transform: none;
+  }
+
+  .data-refresh,
+  .market-pulse,
+  .float-gentle {
+    animation: none;
+  }
+}
+
+/* Print styles for market data */
+@media print {
+  .market-dashboard {
+    @apply bg-white 
+      text-black 
+      shadow-none;
+  }
+
+  .market-card {
+    @apply bg-white 
+      border-gray-300 
+      shadow-none 
+      break-inside-avoid;
+  }
+
+  .finance-gold {
+    color: #000000 !important;
+  }
+
+  .finance-navy {
+    background-color: #ffffff !important;
+  }
+}
+
+/* Focus management for accessibility */
+.market-focus-ring {
+  @apply focus:outline-none 
+    focus:ring-2 
+    focus:ring-finance-gold 
+    focus:ring-offset-2 
+    focus:ring-offset-finance-navy;
+}
+
+/* Enhanced mobile tab navigation */
+.mobile-tab-enhanced {
+  @apply relative 
+    overflow-hidden 
+    before:absolute 
+    before:inset-0 
+    before:bg-gradient-to-r 
+    before:from-transparent 
+    before:via-finance-gold/10 
+    before:to-transparent 
+    before:translate-x-[-100%] 
+    hover:before:translate-x-[100%] 
+    before:transition-transform 
+    before:duration-700;
+}
+
+/* Currency exchange rate styling */
+.currency-rate-card {
+  position: relative;
+  overflow: hidden;
+}
+.currency-rate-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(to bottom, #20B2AA, #40E0D0);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.currency-rate-card:hover::before {
+  opacity: 1;
+}
+
+/* Stock price movement indicators */
+.price-movement-up {
+  @apply text-finance-green 
+    relative 
+    after:absolute 
+    after:top-0 
+    after:right-0 
+    after:w-2 
+    after:h-2 
+    after:bg-finance-green 
+    after:rounded-full 
+    after:animate-pulse;
+}
+
+.price-movement-down {
+  @apply text-finance-red 
+    relative 
+    after:absolute 
+    after:top-0 
+    after:right-0 
+    after:w-2 
+    after:h-2 
+    after:bg-finance-red 
+    after:rounded-full 
+    after:animate-pulse;
+}
+
+.price-movement-neutral {
+  @apply text-finance-electric 
+    relative 
+    after:absolute 
+    after:top-0 
+    after:right-0 
+    after:w-2 
+    after:h-2 
+    after:bg-finance-electric 
+    after:rounded-full;
+}
+
+/* Admin panel helpers */
+[data-active-section="luminaries"] .sponsors-admin {
+  display: none;
+}
