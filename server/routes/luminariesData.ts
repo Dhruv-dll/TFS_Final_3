@@ -1,6 +1,4 @@
 import { RequestHandler } from "express";
-import { promises as fs } from "fs";
-import path from "path";
 
 interface TeamMember {
   id: string;
@@ -22,6 +20,7 @@ interface LuminariesConfig {
   lastModified: number;
 }
 
+// KEEPING ALL YOUR EXISTING FACULTY AND LEADERSHIP DATA EXACTLY AS IS
 const defaultConfig: LuminariesConfig = {
   faculty: [
     {
@@ -220,56 +219,90 @@ const defaultConfig: LuminariesConfig = {
   lastModified: Date.now(),
 };
 
-const LUMINARIES_DATA_PATH = path.join(
-  process.cwd(),
-  "data",
-  "luminaries.json",
-);
-
-async function ensureDataDirectory() {
-  const dir = path.dirname(LUMINARIES_DATA_PATH);
-  try {
-    await fs.access(dir);
-  } catch {
-    await fs.mkdir(dir, { recursive: true });
-  }
-}
-
+// Load luminaries data from GitHub instead of local file system
 async function loadLuminariesData(): Promise<LuminariesConfig> {
   try {
-    await ensureDataDirectory();
-    const data = await fs.readFile(LUMINARIES_DATA_PATH, "utf-8");
-    return JSON.parse(data);
-  } catch {
+    console.log("🔍 Loading luminaries data from GitHub...");
+    
+    // Fetch from GitHub raw URL
+    const response = await fetch(
+      'https://raw.githubusercontent.com/Dhruv-dll/TFS_Final_3/main/data/luminaries.json',
+      { cache: 'no-store' }
+    );
+    
+    if (response.ok) {
+      const data = await response.json();
+      console.log("✅ Successfully loaded luminaries data from GitHub");
+      return data;
+    } else {
+      // File doesn't exist, create it with default config
+      console.log("📝 No existing luminaries data found, creating with defaults");
+      await saveLuminariesData(defaultConfig);
+      return defaultConfig;
+    }
+  } catch (error) {
+    console.log("⚠️ Error loading luminaries data, using defaults:", error.message);
+    // If there's any error, save and return default
     await saveLuminariesData(defaultConfig);
     return defaultConfig;
   }
 }
 
+// Save luminaries data to GitHub via API
 async function saveLuminariesData(config: LuminariesConfig): Promise<void> {
-  await ensureDataDirectory();
-  config.lastModified = Date.now();
-  const content = JSON.stringify(config, null, 2);
-  await fs.writeFile(LUMINARIES_DATA_PATH, content);
-
-  // Try to commit to GitHub for global persistence (optional)
   try {
-    const { commitFileToGitHub } = await import("../utils/git");
-    const result = (await commitFileToGitHub(
-      "data/luminaries.json",
-      content,
-      "chore: update luminaries.json via admin",
-    )) as any;
-    if (!result.success) {
-      console.warn("GitHub commit for luminaries.json failed:", result.error);
-    } else {
-      console.log("Committed luminaries.json to GitHub:", result.url);
-    }
-  } catch (gitErr) {
-    console.warn(
-      "Failed to commit luminaries.json to GitHub:",
-      (gitErr as Error).message || gitErr,
+    config.lastModified = Date.now();
+    const content = JSON.stringify(config, null, 2);
+
+    console.log("💾 Saving luminaries data to GitHub...");
+
+    // Get current file info (needed for GitHub API updates)
+    const fileResponse = await fetch(
+      'https://api.github.com/repos/Dhruv-dll/TFS_Final_3/contents/data/luminaries.json',
+      {
+        headers: {
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+          'Accept': 'application/vnd.github.v3+json'
+        }
+      }
     );
+
+    let sha = undefined;
+    if (fileResponse.ok) {
+      const fileInfo = await fileResponse.json();
+      sha = fileInfo.sha;
+    }
+
+    // Update/create the file via GitHub API
+    const updateResponse = await fetch(
+      'https://api.github.com/repos/Dhruv-dll/TFS_Final_3/contents/data/luminaries.json',
+      {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${process.env.GITHUB_TOKEN}`,
+          'Content-Type': 'application/json',
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        body: JSON.stringify({
+          message: `Update luminaries data - ${new Date().toLocaleString()}`,
+          content: Buffer.from(content).toString('base64'),
+          sha: sha, // Include SHA if file exists, undefined if creating new
+          branch: 'main'
+        })
+      }
+    );
+
+    if (updateResponse.ok) {
+      const result = await updateResponse.json();
+      console.log("✅ Successfully committed luminaries.json to GitHub:", result.content.html_url);
+    } else {
+      const errorText = await updateResponse.text();
+      console.error("❌ GitHub API error for luminaries.json:", errorText);
+      throw new Error('Failed to update GitHub file');
+    }
+  } catch (error) {
+    console.error("❌ Failed to save luminaries data:", error);
+    throw error;
   }
 }
 
@@ -304,6 +337,7 @@ export const updateLuminariesData: RequestHandler = async (req, res) => {
         .status(400)
         .json({ success: false, error: "Invalid luminaries configuration" });
     }
+    
     await saveLuminariesData(data);
     res.json({
       success: true,
@@ -327,6 +361,7 @@ export const checkLuminariesSync: RequestHandler = async (req, res) => {
     const serverConfig = await loadLuminariesData();
     const clientLast = lastModified ? parseInt(lastModified as string) : 0;
     const needsUpdate = serverConfig.lastModified > clientLast;
+    
     res.json({
       success: true,
       needsUpdate,
