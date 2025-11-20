@@ -390,7 +390,238 @@ export default function AdminEventsPanel({
             </div>
 
             <div className="space-y-8">
-              {activeSection === "events" ? (
+              {activeSection === "sessions" ? (
+                <>
+                  {/* Add New Session */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.1 }}
+                    className="bg-finance-navy/40 backdrop-blur-sm rounded-xl p-6 border border-finance-teal/20"
+                  >
+                    <div className="flex items-center space-x-3 mb-4">
+                      <Calendar className="w-6 h-6 text-finance-teal" />
+                      <h3 className="text-xl font-bold text-finance-teal">
+                        Add New Session
+                      </h3>
+                    </div>
+                    <div className="space-y-3">
+                      <Input
+                        placeholder="Session Name (e.g., Fintech Innovations)"
+                        value={newSession.name}
+                        onChange={(e) =>
+                          setNewSession((prev) => ({
+                            ...prev,
+                            name: e.target.value,
+                          }))
+                        }
+                        className="bg-finance-navy/50 border-finance-teal/20"
+                      />
+                      <Input
+                        placeholder="Session Description (optional)"
+                        value={newSession.description}
+                        onChange={(e) =>
+                          setNewSession((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                        }
+                        className="bg-finance-navy/50 border-finance-teal/20"
+                      />
+                      <Button
+                        onClick={handleAddConclaveSession}
+                        className="bg-gradient-to-r from-finance-teal to-finance-mint text-finance-navy hover:scale-105 transition-transform"
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Create Session
+                      </Button>
+                    </div>
+                  </motion.div>
+
+                  {/* Manage Sessions and Speakers */}
+                  {conclaveSessions.map((session, sessionIndex) => (
+                    <motion.div
+                      key={session.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 + sessionIndex * 0.05 }}
+                      className="bg-finance-navy/40 backdrop-blur-sm rounded-xl p-6 border border-finance-teal/20"
+                    >
+                      {/* Session Header */}
+                      <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                          <Mic className="w-6 h-6 text-finance-teal" />
+                          <div>
+                            <h4 className="text-lg font-bold text-finance-teal">
+                              {session.name}
+                            </h4>
+                            {session.description && (
+                              <p className="text-sm text-finance-teal/70">
+                                {session.description}
+                              </p>
+                            )}
+                          </div>
+                        </div>
+                        <Button
+                          onClick={() => removeSession(session.id)}
+                          variant="destructive"
+                          size="sm"
+                        >
+                          Delete Session
+                        </Button>
+                      </div>
+
+                      {/* Add Speaker Section */}
+                      <div className="bg-finance-navy/30 rounded-lg p-4 mb-4 border border-finance-teal/10">
+                        <h5 className="text-sm font-bold text-finance-teal mb-3">
+                          Add Speaker to This Session
+                        </h5>
+                        <div className="space-y-3">
+                          <Input
+                            placeholder="Speaker Name"
+                            value={
+                              selectedSessionForSpeaker === session.id
+                                ? newSpeaker.name
+                                : ""
+                            }
+                            onChange={(e) => {
+                              setSelectedSessionForSpeaker(session.id);
+                              setNewSpeaker((prev) => ({
+                                ...prev,
+                                name: e.target.value,
+                              }));
+                            }}
+                            className="bg-finance-navy/50 border-finance-teal/20"
+                          />
+                          <Input
+                            placeholder="LinkedIn Profile URL or ID (e.g., linkedin.com/in/username)"
+                            value={
+                              selectedSessionForSpeaker === session.id
+                                ? newSpeaker.linkedinId
+                                : ""
+                            }
+                            onChange={(e) => {
+                              setSelectedSessionForSpeaker(session.id);
+                              setNewSpeaker((prev) => ({
+                                ...prev,
+                                linkedinId: e.target.value,
+                              }));
+                            }}
+                            className="bg-finance-navy/50 border-finance-teal/20"
+                          />
+                          <Input
+                            placeholder="Photo URL"
+                            value={
+                              selectedSessionForSpeaker === session.id
+                                ? newSpeaker.photo
+                                : ""
+                            }
+                            onChange={(e) => {
+                              setSelectedSessionForSpeaker(session.id);
+                              setNewSpeaker((prev) => ({
+                                ...prev,
+                                photo: e.target.value,
+                              }));
+                            }}
+                            className="bg-finance-navy/50 border-finance-teal/20"
+                          />
+                          <Input
+                            placeholder="Speaker Bio (optional)"
+                            value={
+                              selectedSessionForSpeaker === session.id
+                                ? newSpeaker.bio
+                                : ""
+                            }
+                            onChange={(e) => {
+                              setSelectedSessionForSpeaker(session.id);
+                              setNewSpeaker((prev) => ({
+                                ...prev,
+                                bio: e.target.value,
+                              }));
+                            }}
+                            className="bg-finance-navy/50 border-finance-teal/20"
+                          />
+                          <Button
+                            onClick={handleAddSpeaker}
+                            disabled={selectedSessionForSpeaker !== session.id}
+                            className="bg-gradient-to-r from-finance-mint to-finance-teal text-finance-navy hover:scale-105 transition-transform disabled:opacity-50"
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Add Speaker
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Current Speakers */}
+                      {session.speakers.length > 0 && (
+                        <div className="space-y-2">
+                          <h5 className="text-sm font-bold text-finance-teal">
+                            Speakers ({session.speakers.length})
+                          </h5>
+                          {session.speakers.map((speaker) => (
+                            <div
+                              key={speaker.id}
+                              className="bg-finance-navy/30 p-3 rounded-lg flex items-start justify-between border border-finance-teal/10"
+                            >
+                              <div className="flex gap-3 flex-1">
+                                {speaker.photo && (
+                                  <img
+                                    src={speaker.photo}
+                                    alt={speaker.name}
+                                    className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                                    onError={(e) => {
+                                      (e.target as HTMLImageElement).style.display =
+                                        "none";
+                                    }}
+                                  />
+                                )}
+                                <div className="flex-1">
+                                  <div className="font-medium text-finance-teal">
+                                    {speaker.name}
+                                  </div>
+                                  <a
+                                    href={
+                                      speaker.linkedinId.startsWith("http")
+                                        ? speaker.linkedinId
+                                        : `https://linkedin.com/in/${speaker.linkedinId}`
+                                    }
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-xs text-finance-teal/60 hover:text-finance-teal/90 break-all"
+                                  >
+                                    {speaker.linkedinId}
+                                  </a>
+                                  {speaker.bio && (
+                                    <p className="text-xs text-finance-teal/50 mt-1">
+                                      {speaker.bio}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+                              <Button
+                                onClick={() =>
+                                  removeSpeaker(session.id, speaker.id)
+                                }
+                                variant="destructive"
+                                size="sm"
+                                className="flex-shrink-0"
+                              >
+                                Remove
+                              </Button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </motion.div>
+                  ))}
+
+                  {conclaveSessions.length === 0 && (
+                    <div className="text-center py-8 text-finance-teal/60">
+                      No sessions created yet. Create your first session above!
+                    </div>
+                  )}
+                </>
+              ) : activeSection === "events" ? (
                 <>
                   {/* Saturday Sessions */}
                   <motion.div
