@@ -19,7 +19,7 @@ export default function AdminEventsPanel({
   isOpen,
   onClose,
 }: AdminEventsPanelProps) {
-  const [activeSection, setActiveSection] = useState<"events" | "sponsors" | "luminaries" | "sessions">(
+  const [activeSection, setActiveSection] = useState<"events" | "sponsors" | "luminaries" | "sessions" | "magazines">(
     "events",
   );
 
