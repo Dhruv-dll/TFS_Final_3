@@ -41,6 +41,16 @@ export default function AdminEventsPanel({
   const { faculty, leadership, addMember, updateMember, removeMember } =
     useLuminariesData();
 
+  const {
+    sessions: conclaveSessions,
+    addSession,
+    updateSession,
+    removeSession,
+    addSpeaker,
+    updateSpeaker,
+    removeSpeaker,
+  } = useConclaveSessionsData();
+
   const [newLuminary, setNewLuminary] = useState<LuminaryMember>({
     id: "",
     name: "",
@@ -54,6 +64,21 @@ export default function AdminEventsPanel({
     quote: "",
   });
   const [luminaryGroup, setLuminaryGroup] = useState<"faculty" | "leadership">("faculty");
+
+  // Conclave Sessions state
+  const [newSession, setNewSession] = useState({
+    name: "",
+    description: "",
+  });
+
+  const [newSpeaker, setNewSpeaker] = useState({
+    name: "",
+    linkedinId: "",
+    photo: "",
+    bio: "",
+  });
+
+  const [selectedSessionForSpeaker, setSelectedSessionForSpeaker] = useState<string | null>(null);
 
   const [newSaturdaySession, setNewSaturdaySession] = useState({
     title: "",
