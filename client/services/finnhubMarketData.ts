@@ -286,98 +286,110 @@ class FinnhubMarketDataService {
                 credentials: "same-origin" as RequestCredentials,
               };
 
-              fetch("/api/market-data", fetchOptions)
-                .then((response) => {
-                  try {
-                    clearTimeout(timeoutId);
-                    const responseTime = Date.now() - requestStartTime;
+              try {
+                fetch("/api/market-data", fetchOptions)
+                  .then((response) => {
+                    try {
+                      clearTimeout(timeoutId);
+                      const responseTime = Date.now() - requestStartTime;
 
-                    if (response.ok) {
-                      console.log(
-                        `✅ Server response received in ${responseTime}ms`,
-                      );
-                      // Reset failure count on successful response
-                      this.apiFailureCount = Math.max(
-                        0,
-                        this.apiFailureCount - 1,
-                      );
-                      resolve(response);
-                    } else {
+                      if (response.ok) {
+                        console.log(
+                          `✅ Server response received in ${responseTime}ms`,
+                        );
+                        this.apiFailureCount = Math.max(
+                          0,
+                          this.apiFailureCount - 1,
+                        );
+                        resolve(response);
+                      } else {
+                        console.warn(
+                          `⚠️ Server returned ${response.status}: ${response.statusText}`,
+                        );
+                        this.apiFailureCount++;
+
+                        if (response.status >= 400 && response.status < 500) {
+                          resolve(
+                            new Response(
+                              JSON.stringify({
+                                fallback: true,
+                                reason: "client-error",
+                                status: response.status,
+                              }),
+                              {
+                                status: 200,
+                                headers: { "Content-Type": "application/json" },
+                              },
+                            ),
+                          );
+                        } else {
+                          resolve(response);
+                        }
+                      }
+                    } catch (responseError) {
                       console.warn(
-                        `⚠️ Server returned ${response.status}: ${response.statusText}`,
+                        "📊 Response processing error, using fallback:",
+                        responseError?.message || "Unknown response error",
                       );
                       this.apiFailureCount++;
-
-                      // For client errors (4xx), don't retry immediately
-                      if (response.status >= 400 && response.status < 500) {
-                        resolve(
-                          new Response(
-                            JSON.stringify({
-                              fallback: true,
-                              reason: "client-error",
-                              status: response.status,
-                            }),
-                            {
-                              status: 200,
-                              headers: { "Content-Type": "application/json" },
-                            },
-                          ),
-                        );
-                      } else {
-                        resolve(response); // Let the error handling logic deal with it
-                      }
+                      resolve(
+                        new Response(
+                          JSON.stringify({
+                            fallback: true,
+                            reason: "response-error",
+                          }),
+                          {
+                            status: 200,
+                            headers: { "Content-Type": "application/json" },
+                          },
+                        ),
+                      );
                     }
-                  } catch (responseError) {
-                    console.warn(
-                      "📊 Response processing error, using fallback:",
-                      responseError?.message || "Unknown response error",
-                    );
-                    this.apiFailureCount++;
-                    resolve(
-                      new Response(
-                        JSON.stringify({
-                          fallback: true,
-                          reason: "response-error",
-                        }),
-                        {
+                  })
+                  .catch((error) => {
+                    try {
+                      clearTimeout(timeoutId);
+                      console.warn(
+                        "📊 Network fetch failed, switching to fallback mode:",
+                        error?.message || "Unknown fetch error",
+                      );
+
+                      this.fallbackMode = true;
+                      this.apiFailureCount = 999;
+
+                      resolve(
+                        new Response(JSON.stringify({ fallback: true }), {
                           status: 200,
                           headers: { "Content-Type": "application/json" },
-                        },
-                      ),
-                    );
-                  }
-                })
-                .catch((error) => {
-                  try {
-                    clearTimeout(timeoutId);
-                    console.warn(
-                      "📊 Network fetch failed, switching to fallback mode:",
-                      error?.message || "Unknown fetch error",
-                    );
-
-                    // Immediately switch to fallback mode for any fetch error
-                    this.fallbackMode = true;
-                    this.apiFailureCount = 999; // Force permanent fallback
-
-                    // Create a special response that indicates fallback mode
-                    resolve(
-                      new Response(JSON.stringify({ fallback: true }), {
-                        status: 200,
-                        headers: { "Content-Type": "application/json" },
-                      }),
-                    );
-                  } catch (catchError) {
-                    console.warn(
-                      "📊 Error in catch handler, using ultimate fallback",
-                    );
-                    resolve(
-                      new Response(JSON.stringify({ fallback: true }), {
-                        status: 200,
-                        headers: { "Content-Type": "application/json" },
-                      }),
-                    );
-                  }
-                });
+                        }),
+                      );
+                    } catch (catchError) {
+                      console.warn(
+                        "📊 Error in catch handler, using ultimate fallback",
+                      );
+                      resolve(
+                        new Response(JSON.stringify({ fallback: true }), {
+                          status: 200,
+                          headers: { "Content-Type": "application/json" },
+                        }),
+                      );
+                    }
+                  });
+              } catch (fetchInitError) {
+                clearTimeout(timeoutId);
+                console.warn(
+                  "📊 Fetch initialization error, using fallback:",
+                  fetchInitError?.message || "Unknown error",
+                );
+                this.fallbackMode = true;
+                this.apiFailureCount = 999;
+                resolve(
+                  new Response(JSON.stringify({ fallback: true }), {
+                    status: 200,
+                    headers: { "Content-Type": "application/json" },
+                  }),
+                );
+              }
             } catch (fetchError) {
               try {
                 clearTimeout(timeoutId);
