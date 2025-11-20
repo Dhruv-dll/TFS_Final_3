@@ -84,6 +84,20 @@ export default function AdminEventsPanel({
 
   const [selectedSessionForSpeaker, setSelectedSessionForSpeaker] = useState<string | null>(null);
 
+  // Magazine state
+  const [newMagazine, setNewMagazine] = useState({
+    title: "",
+    edition: "",
+    description: "",
+    cover: "",
+    articles: 0,
+    downloads: 0,
+    readTime: "",
+    categories: "",
+    highlights: "",
+    link: "",
+  });
+
   const [newSaturdaySession, setNewSaturdaySession] = useState({
     title: "",
     description: "",
