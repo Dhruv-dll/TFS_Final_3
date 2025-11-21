@@ -18,7 +18,16 @@
       ],
       "id": "session-1763711465633",
       "createdAt": 1763711465633
+    },
+    {
+      "name": "sadasdasd",
+      "description": "asdasdas",
+      "startTime": "12:23",
+      "endTime": "12:34",
+      "speakers": [],
+      "id": "session-1763714502218",
+      "createdAt": 1763714502218
     }
   ],
-  "lastModified": 1763714246118
+  "lastModified": 1763714510245
 }
