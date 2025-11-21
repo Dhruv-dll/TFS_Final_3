@@ -400,6 +400,11 @@ export default function Index() {
               <MobileOptimizedEventsSection />
             </section>
 
+            {/* Flagship Conclave Sessions */}
+            <section id="conclave">
+              <FlagshipConclaveSection />
+            </section>
+
             {/* Insights Section */}
             <section id="insights">
               <OptimizedFinsightSection />
