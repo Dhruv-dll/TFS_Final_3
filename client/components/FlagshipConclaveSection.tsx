@@ -12,8 +12,15 @@ export default function FlagshipConclaveSection() {
     triggerOnce: true,
   });
 
-  const { sessions } = useConclaveSessionsData();
+  const { sessions, loading } = useConclaveSessionsData();
   const [expandedSession, setExpandedSession] = useState<string | null>(null);
+
+  // Auto-expand first session on load
+  React.useEffect(() => {
+    if (sessions.length > 0 && !expandedSession) {
+      setExpandedSession(sessions[0].id);
+    }
+  }, [sessions, expandedSession]);
 
   const containerRef = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
