@@ -78,14 +78,7 @@ export default function FlagshipConclaveSection() {
                 whileHover={{ y: -5, boxShadow: "0 20px 40px rgba(32, 178, 170, 0.2)" }}
               >
                 {/* Session Header */}
-                <div
-                  onClick={() =>
-                    setExpandedSession(
-                      expandedSession === session.id ? null : session.id,
-                    )
-                  }
-                  className="p-6 cursor-pointer border-b border-finance-teal/20"
-                >
+                <div className="p-6 border-b border-finance-teal/20">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h3 className="text-2xl font-bold text-finance-teal mb-2">
@@ -114,97 +107,74 @@ export default function FlagshipConclaveSection() {
                         <span>{session.speakers.length} Speaker{session.speakers.length !== 1 ? "s" : ""}</span>
                       </div>
                     </div>
-
-                    {/* Expand/Collapse Icon */}
-                    <motion.div
-                      animate={{
-                        rotate: expandedSession === session.id ? 180 : 0,
-                      }}
-                      transition={{ duration: 0.3 }}
-                      className="text-finance-teal ml-4 flex-shrink-0"
-                    >
-                      <ChevronDown className="w-6 h-6" />
-                    </motion.div>
                   </div>
                 </div>
 
-                {/* Speakers List */}
-                <AnimatePresence>
-                  {expandedSession === session.id && (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      transition={{ duration: 0.3 }}
-                      className="overflow-hidden"
-                    >
-                      <div className="px-6 pb-6 space-y-4">
-                        {session.speakers.length > 0 ? (
-                          session.speakers.map((speaker, speakerIndex) => (
-                            <motion.div
-                              key={speaker.id}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: speakerIndex * 0.1 }}
-                              className="bg-finance-navy/50 rounded-lg p-4 border border-finance-teal/20 hover:border-finance-teal/40 transition-colors"
-                            >
-                              <div className="flex gap-4">
-                                {speaker.photo && (
-                                  <img
-                                    src={speaker.photo}
-                                    alt={speaker.name}
-                                    className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
-                                    onError={(e) => {
-                                      (e.target as HTMLImageElement).style.display = "none";
-                                    }}
-                                  />
-                                )}
-                                <div className="flex-1">
-                                  <div className="font-bold text-finance-teal mb-1">
-                                    {speaker.name}
-                                  </div>
-                                  {speaker.bio && (
-                                    <p className="text-xs text-foreground/70 mb-2">
-                                      {speaker.bio}
-                                    </p>
-                                  )}
-                                  {(speaker.startTime || speaker.endTime) && (
-                                    <div className="flex items-center gap-2 text-finance-mint text-xs mb-2">
-                                      <Clock className="w-3 h-3" />
-                                      <span>
-                                        {speaker.startTime || "—"}{" "}
-                                        {speaker.endTime && `to ${speaker.endTime}`}
-                                      </span>
-                                    </div>
-                                  )}
-                                  {speaker.linkedinId && (
-                                    <a
-                                      href={
-                                        speaker.linkedinId.startsWith("http")
-                                          ? speaker.linkedinId
-                                          : `https://linkedin.com/in/${speaker.linkedinId}`
-                                      }
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                      className="inline-flex items-center gap-1 text-finance-electric text-xs hover:text-finance-teal transition-colors"
-                                    >
-                                      LinkedIn
-                                      <ExternalLink className="w-3 h-3" />
-                                    </a>
-                                  )}
-                                </div>
+                {/* Speakers List - Always Visible */}
+                <div className="px-6 pb-6 space-y-4">
+                  {session.speakers.length > 0 ? (
+                    session.speakers.map((speaker, speakerIndex) => (
+                      <motion.div
+                        key={speaker.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: speakerIndex * 0.1 }}
+                        className="bg-finance-navy/50 rounded-lg p-4 border border-finance-teal/20 hover:border-finance-teal/40 transition-colors"
+                      >
+                        <div className="flex gap-4">
+                          {speaker.photo && (
+                            <img
+                              src={speaker.photo}
+                              alt={speaker.name}
+                              className="w-16 h-16 rounded-lg object-cover flex-shrink-0"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = "none";
+                              }}
+                            />
+                          )}
+                          <div className="flex-1">
+                            <div className="font-bold text-finance-teal mb-1">
+                              {speaker.name}
+                            </div>
+                            {speaker.bio && (
+                              <p className="text-xs text-foreground/70 mb-2">
+                                {speaker.bio}
+                              </p>
+                            )}
+                            {(speaker.startTime || speaker.endTime) && (
+                              <div className="flex items-center gap-2 text-finance-mint text-xs mb-2">
+                                <Clock className="w-3 h-3" />
+                                <span>
+                                  {speaker.startTime || "—"}{" "}
+                                  {speaker.endTime && `to ${speaker.endTime}`}
+                                </span>
                               </div>
-                            </motion.div>
-                          ))
-                        ) : (
-                          <div className="text-center py-4 text-foreground/60">
-                            No speakers added yet for this session
+                            )}
+                            {speaker.linkedinId && (
+                              <a
+                                href={
+                                  speaker.linkedinId.startsWith("http")
+                                    ? speaker.linkedinId
+                                    : `https://linkedin.com/in/${speaker.linkedinId}`
+                                }
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1 text-finance-electric text-xs hover:text-finance-teal transition-colors"
+                              >
+                                LinkedIn
+                                <ExternalLink className="w-3 h-3" />
+                              </a>
+                            )}
                           </div>
-                        )}
-                      </div>
-                    </motion.div>
+                        </div>
+                      </motion.div>
+                    ))
+                  ) : (
+                    <div className="text-center py-4 text-foreground/60">
+                      No speakers added yet for this session
+                    </div>
                   )}
-                </AnimatePresence>
+                </div>
               </motion.div>
             </motion.div>
           ))}
