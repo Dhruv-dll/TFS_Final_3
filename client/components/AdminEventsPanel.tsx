@@ -889,6 +889,42 @@ export default function AdminEventsPanel({
                             }}
                             className="bg-finance-navy/50 border-finance-teal/20"
                           />
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <Input
+                              type="time"
+                              placeholder="Speaker Start Time"
+                              value={
+                                selectedSessionForSpeaker === session.id
+                                  ? newSpeaker.startTime
+                                  : ""
+                              }
+                              onChange={(e) => {
+                                setSelectedSessionForSpeaker(session.id);
+                                setNewSpeaker((prev) => ({
+                                  ...prev,
+                                  startTime: e.target.value,
+                                }));
+                              }}
+                              className="bg-finance-navy/50 border-finance-teal/20"
+                            />
+                            <Input
+                              type="time"
+                              placeholder="Speaker End Time"
+                              value={
+                                selectedSessionForSpeaker === session.id
+                                  ? newSpeaker.endTime
+                                  : ""
+                              }
+                              onChange={(e) => {
+                                setSelectedSessionForSpeaker(session.id);
+                                setNewSpeaker((prev) => ({
+                                  ...prev,
+                                  endTime: e.target.value,
+                                }));
+                              }}
+                              className="bg-finance-navy/50 border-finance-teal/20"
+                            />
+                          </div>
                           <Button
                             onClick={handleAddSpeaker}
                             disabled={selectedSessionForSpeaker !== session.id}
