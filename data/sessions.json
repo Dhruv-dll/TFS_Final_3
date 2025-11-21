@@ -1,14 +1,14 @@
 {
   "sessions": [
     {
-      "name": "wgfhjksdgfkjsdqkjsdf",
-      "description": "",
-      "startTime": "",
-      "endTime": "",
+      "name": "sadasda",
+      "description": "asdasdas",
+      "startTime": "12:23",
+      "endTime": "12:53",
       "speakers": [],
-      "id": "session-1763711374951",
-      "createdAt": 1763711374951
+      "id": "session-1763711465633",
+      "createdAt": 1763711465633
     }
   ],
-  "lastModified": 1763711382883
+  "lastModified": 1763711473557
 }
