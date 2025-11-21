@@ -298,9 +298,11 @@ export default function AdminEventsPanel({
       addSession({
         name: newSession.name,
         description: newSession.description,
+        startTime: newSession.startTime,
+        endTime: newSession.endTime,
         speakers: [],
       });
-      setNewSession({ name: "", description: "" });
+      setNewSession({ name: "", description: "", startTime: "", endTime: "" });
       alert("Session added successfully!");
     } else {
       alert("Please enter a session name.");
