@@ -1,4 +1,24 @@
 {
-  "sessions": [],
-  "lastModified": 1763714235106
+  "sessions": [
+    {
+      "name": "sadasda",
+      "description": "asdasdas",
+      "startTime": "12:23",
+      "endTime": "12:53",
+      "speakers": [
+        {
+          "name": "aksdgakjsdas",
+          "linkedinId": "sdasdasd",
+          "photo": "asdasdas",
+          "bio": "dasdasd",
+          "startTime": "12:03",
+          "endTime": "12:03",
+          "id": "speaker-1763714238115"
+        }
+      ],
+      "id": "session-1763711465633",
+      "createdAt": 1763711465633
+    }
+  ],
+  "lastModified": 1763714246118
 }
