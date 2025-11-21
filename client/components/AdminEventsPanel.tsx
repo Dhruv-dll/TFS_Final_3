@@ -750,6 +750,32 @@ export default function AdminEventsPanel({
                         }
                         className="bg-finance-navy/50 border-finance-teal/20"
                       />
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <Input
+                          type="time"
+                          placeholder="Start Time"
+                          value={newSession.startTime}
+                          onChange={(e) =>
+                            setNewSession((prev) => ({
+                              ...prev,
+                              startTime: e.target.value,
+                            }))
+                          }
+                          className="bg-finance-navy/50 border-finance-teal/20"
+                        />
+                        <Input
+                          type="time"
+                          placeholder="End Time"
+                          value={newSession.endTime}
+                          onChange={(e) =>
+                            setNewSession((prev) => ({
+                              ...prev,
+                              endTime: e.target.value,
+                            }))
+                          }
+                          className="bg-finance-navy/50 border-finance-teal/20"
+                        />
+                      </div>
                       <Button
                         onClick={handleAddConclaveSession}
                         className="bg-gradient-to-r from-finance-teal to-finance-mint text-finance-navy hover:scale-105 transition-transform"
