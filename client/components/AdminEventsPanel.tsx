@@ -980,6 +980,11 @@ export default function AdminEventsPanel({
                                       {speaker.bio}
                                     </p>
                                   )}
+                                  {(speaker.startTime || speaker.endTime) && (
+                                    <p className="text-xs text-finance-mint/70 mt-1">
+                                      🕐 {speaker.startTime || "—"} to {speaker.endTime || "—"}
+                                    </p>
+                                  )}
                                 </div>
                               </div>
                               <Button
