@@ -29,10 +29,6 @@ export default function FlagshipConclaveSection() {
     }
   }, [inViewRef]);
 
-  if (sessions.length === 0) {
-    return null;
-  }
-
   return (
     <section
       ref={sectionRef}
